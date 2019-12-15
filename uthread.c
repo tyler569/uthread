@@ -15,7 +15,7 @@ struct uthread *active_threads[MAX_UTHREADS] = {0};
 struct uthread *running_uthread = NULL;
 struct uthread thread_one = {0};
 
-int uthread_init() {
+void uthread_init() {
     active_threads[0] = &thread_one;
     running_uthread = &thread_one;
     thread_one.uthread_state = UTHREAD_RUNNING;

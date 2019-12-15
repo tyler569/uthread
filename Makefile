@@ -1,3 +1,10 @@
 
-uthread: uthread.c uthread.h test.c
-	cc -g uthread.c test.c -o uthread
+CFLAGS=-Wall -g
+
+all: uthread
+
+libuthread.a: uthread.o
+	ar rcs libuthread.a uthread.o
+
+uthread: example.o libuthread.a
+	$(CC) $(CFLAGS) -o uthread example.o libuthread.a

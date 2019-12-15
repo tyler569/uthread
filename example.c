@@ -30,11 +30,11 @@ int main() {
 */
 
 void ab(int ab) {
-    while (true) {
+    for (int i=0; i<1000; i++) {
         printf("%c", ab);
         uthread_yield();
     }
-    printf("bad things\n");
+    printf("\n");
     uthread_exit();
 }
 
@@ -53,5 +53,7 @@ int main() {
     uthread_join(&a);
     printf("joining on b\n");
     uthread_join(&b);
+
+    printf("done, goodbye!\n");
 }
 

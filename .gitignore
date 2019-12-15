@@ -1,1 +1,3 @@
 uthread
+*.a
+*.o
