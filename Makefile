@@ -1,3 +1,3 @@
 
-uthread: uthread.c
-	cc -g uthread.c -o uthread
+uthread: uthread.c uthread.h test.c
+	cc -g uthread.c test.c -o uthread
