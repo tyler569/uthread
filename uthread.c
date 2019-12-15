@@ -1,7 +1,7 @@
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
-#include <unistd.h>
 #include <setjmp.h>
 
 enum uthread_state {
@@ -11,6 +11,7 @@ enum uthread_state {
 
 struct uthread {
     enum uthread_state uthread_state;
+    void *stack;
     jmp_buf execution_state;
 };
 
@@ -20,11 +21,9 @@ void uthread_yield();
 void thread_fn(int th_num) {
     while(true) {
         int x = 100;
-        /*
         fprintf(stderr, "enter a number: ");
         fflush(stderr);
         fscanf(stdin, "%d", &x);
-        */
         printf("thread %d: %d\n", th_num, x);
 
         if (x == 100) {
@@ -40,10 +39,14 @@ int active_threads_top = 0;
 
 struct uthread *running_uthread = NULL;
 
+#define STACK_SIZE (1024 * 1024)
+
 int uthread_create(struct uthread *thread, void (*func)(int), int arg) {
     thread->uthread_state = UTHREAD_RUNNING;
+    thread->stack = malloc(STACK_SIZE);
     active_threads[active_threads_top++] = thread;
     running_uthread = thread;
+    asm volatile ("mov %0, %%rsp\n\t" :: "g"(thread->stack + STACK_SIZE));
     func(arg);
     return 0;
 }
